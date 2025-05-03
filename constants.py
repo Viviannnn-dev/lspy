@@ -8,7 +8,7 @@ MODEL_FRAMES = 15
 
 # PATHS
 ROOT_PATH = os.getcwd()
-FRAME_ACTIONS_PATH = os.path.join(ROOT_PATH, "frame_actions")
+FRAME_ACTIONS_PATH = os.path.join(ROOT_PATH, "MSLwords1")
 DATA_PATH = os.path.join(ROOT_PATH, "data")
 DATA_JSON_PATH = os.path.join(DATA_PATH, "data.json")
 MODEL_FOLDER_PATH = os.path.join(ROOT_PATH, "models")

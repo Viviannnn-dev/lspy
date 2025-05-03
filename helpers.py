@@ -10,10 +10,16 @@ from constants import *
 
 # GENERAL
 def mediapipe_detection(image, model):
+    # Validar que la imagen se haya cargado correctamente
+    if image is None:
+        print("Error: La imagen no se pudo cargar correctamente.")
+        return None  # Retorna None si la imagen no es válida
+    
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image.flags.writeable = False
     results = model.process(image)
     return results
+
 
 def create_folder(path):
     '''
@@ -74,12 +80,20 @@ def save_frames(frames, output_folder):
         cv2.imwrite(frame_path, cv2.cvtColor(frame, cv2.COLOR_BGR2BGRA))
 
 # CREATE KEYPOINTS
+
 def extract_keypoints(results):
+    # Verificar si results es None
+    if results is None:
+        print("No se detectaron keypoints en la imagen.")
+        return np.zeros(33*4 + 468*3 + 21*3 + 21*3)  # Retorna un array de ceros si no se detectan keypoints
+    
     pose = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten() if results.pose_landmarks else np.zeros(33*4)
     face = np.array([[res.x, res.y, res.z] for res in results.face_landmarks.landmark]).flatten() if results.face_landmarks else np.zeros(468*3)
     lh = np.array([[res.x, res.y, res.z] for res in results.left_hand_landmarks.landmark]).flatten() if results.left_hand_landmarks else np.zeros(21*3)
     rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
+    
     return np.concatenate([pose, face, lh, rh])
+
 
 def get_keypoints(model, sample_path):
     '''
